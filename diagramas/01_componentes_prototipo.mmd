@@ -1,0 +1,23 @@
+flowchart LR
+    subgraph Externo[Entradas simuladas - fuera del componente]
+        Console[Menú por teclado]
+        Pasarela[SimuladorPasarela]
+    end
+    subgraph Centro[Componente implementado: Centro de Control de Residencia]
+        Caso[CentroControlResidencia / Caso de uso]
+        Evaluador[EvaluadorSituaciones / Servicio de dominio]
+        Lectura[LecturaSensor / Value Object]
+        Evento[EventoCritico / Domain Event]
+        Publicador[Puerto PublicadorEventos]
+        Consulta[Puerto ConsultaResidentes]
+    end
+    subgraph Adaptadores[Adaptadores de salida - simulados]
+        ConsoleEv[PublicadorEventosConsola]
+        Mem[ConsultaResidentesEnMemoria]
+    end
+    Console --> Pasarela --> Caso
+    Caso --> Lectura
+    Caso --> Evaluador
+    Evaluador --> Evento
+    Caso --> Publicador --> ConsoleEv
+    Caso --> Consulta --> Mem

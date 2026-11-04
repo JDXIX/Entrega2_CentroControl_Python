@@ -1,0 +1,58 @@
+classDiagram
+    direction LR
+    class LecturaSensor {
+        <<ValueObject>>
+        +str tipo_dato
+        +any valor
+        +str referencia_origen
+        +str identificador_residente
+    }
+    class EventoCritico {
+        <<DomainEvent>>
+        +str tipo_evento
+        +str referencia_origen
+    }
+    class AlertaDeCaidaDetectada {
+        <<DomainEvent>>
+    }
+    class EvaluadorSituaciones {
+        <<DomainService>>
+        +evaluar(lectura) EventoCritico
+    }
+    class RecepcionPasarela {
+        <<interface>>
+        +recibir_datos(lectura) ResultadoRecepcion
+    }
+    class PublicadorEventos {
+        <<interface>>
+        +publicar(evento)
+    }
+    class ConsultaResidentes {
+        <<interface>>
+        +consultar_referencia(id) bool
+    }
+    class CentroControlResidencia {
+        +recibir_datos(lectura) ResultadoRecepcion
+        +agregar_datos() tuple
+        +evaluar_situacion(lectura) EventoCritico
+        +emitir_evento_critico(evento)
+    }
+    class SimuladorPasarela {
+        +enviar_lectura(lectura) ResultadoRecepcion
+    }
+    class PublicadorEventosConsola {
+        +publicar(evento)
+    }
+    class ConsultaResidentesEnMemoria {
+        +consultar_referencia(id) bool
+    }
+    CentroControlResidencia ..|> RecepcionPasarela
+    CentroControlResidencia --> EvaluadorSituaciones
+    CentroControlResidencia --> PublicadorEventos
+    CentroControlResidencia --> ConsultaResidentes
+    CentroControlResidencia ..> LecturaSensor
+    EvaluadorSituaciones ..> EventoCritico
+    AlertaDeCaidaDetectada --|> EventoCritico
+    SimuladorPasarela --> RecepcionPasarela
+    PublicadorEventosConsola ..|> PublicadorEventos
+    ConsultaResidentesEnMemoria ..|> ConsultaResidentes

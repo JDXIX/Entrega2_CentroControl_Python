@@ -1,0 +1,17 @@
+sequenceDiagram
+    actor Usuario
+    participant Pasarela as SimuladorPasarela
+    participant Centro as CentroControlResidencia
+    participant Residente as ConsultaResidentes
+    participant Evaluador as EvaluadorSituaciones
+    participant Publicador as PublicadorEventos
+    Usuario->>Pasarela: Simular LecturaSensor(caida, True)
+    Pasarela->>Centro: recibir_datos(lectura)
+    Centro->>Residente: consultar_referencia(id_demo)
+    Residente-->>Centro: referencia encontrada (simulación)
+    Centro->>Evaluador: evaluar(lectura)
+    Evaluador-->>Centro: AlertaDeCaidaDetectada
+    Centro->>Publicador: publicar(evento)
+    Note over Publicador: Consola; no notificación real
+    Centro-->>Pasarela: ResultadoRecepcion
+    Pasarela-->>Usuario: Mostrar resultado
